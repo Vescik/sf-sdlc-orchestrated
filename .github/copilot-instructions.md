@@ -11,16 +11,21 @@ organized by work item and goes from an ADO requirement to a reviewed PR.
    new item.
 2. **Take the matching route.**
 
-| Request and state | Skill |
-|---|---|
-| A question | None. Answer from the files and `force-app/` |
-| `ado-context.md` missing | [fetch-ado-item](skills/fetch-ado-item/SKILL.md) |
-| A design is needed | [solution-design](skills/solution-design/SKILL.md) |
-| Design, no `tasks.md`: implement | [development](skills/development/SKILL.md) |
-| Design and `tasks.md`: continue, change, fix, remove | [continue-development](skills/continue-development/SKILL.md) |
-| No design, small change | [development](skills/development/SKILL.md), small change |
-| Metadata must reach the org | [deployment](skills/deployment/SKILL.md) |
-| Branch, commit, sync, push, PR | [git-workflow](skills/git-workflow/SKILL.md) |
+| Request and state | Agent | Skill |
+|---|---|---|
+| A question | any | None. Answer from the files and `force-app/` |
+| `ado-context.md` missing | `designer` | [fetch-ado-item](skills/fetch-ado-item/SKILL.md) |
+| A design is needed | `designer` | [solution-design](skills/solution-design/SKILL.md) |
+| Design, no `tasks.md`: implement | `developer` | [development](skills/development/SKILL.md) |
+| Design and `tasks.md`: continue, change, fix, remove | `developer` | [continue-development](skills/continue-development/SKILL.md) |
+| No design, small change | `developer` | [development](skills/development/SKILL.md), small change |
+| Metadata must reach the org | `developer` | [deployment](skills/deployment/SKILL.md) |
+| Independent review of a design or implementation | `reviewer` | None. The agent holds the procedure |
+| Sync, conflicts, push, PR | `git-agent` | [git-workflow](skills/git-workflow/SKILL.md) |
+
+Each agent has only the tools its role needs: only the Designer reads ADO, only the Git Agent has
+GitHub tools, and the Reviewer has no editor. If the request belongs to another agent, say which
+one and offer its handoff. The default agent can follow any skill, under the same rules.
 
 ## Work item files
 
@@ -83,6 +88,7 @@ confirmation.
 - `force-app/`: Salesforce DX source. `manifest/`: manifests for removals.
 - `docs/package-concept.md`: the package domain map. `docs/package-constraints.md`: known package
   behavior. Read both when designing or when package behavior matters.
+- `.github/agents/`: `designer`, `developer`, `reviewer`, `git-agent`.
 - `.github/instructions/`: [package boundaries](instructions/managed-package.instructions.md),
   [Apex](instructions/apex.instructions.md), [Flows](instructions/flows.instructions.md).
 

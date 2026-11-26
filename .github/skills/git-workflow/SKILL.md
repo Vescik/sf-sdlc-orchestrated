@@ -34,7 +34,7 @@ These need an explicit instruction for each: push, PR creation or update, merge.
 or a passing check is not an instruction. A push instruction does not create a PR.
 
 - **Push:** `git push -u origin <branch>`.
-- **PR:** with the GitHub MCP tools. First search for an open PR from the same branch and update it
+- **PR:** with the GitHub MCP tools, which only the Git Agent has. First search for an open PR from the same branch and update it
   instead of creating a second one. Create it as a draft unless the human asks for ready. Base
   `main`. Fill `.github/pull_request_template.md` with facts only: what ran, what did not.
 - **Merge:** only on an explicit instruction naming the PR. Never approve your own PR.
