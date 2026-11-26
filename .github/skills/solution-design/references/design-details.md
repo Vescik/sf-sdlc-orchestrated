@@ -26,5 +26,4 @@ the component names from the table and mark uncertain links.
 
 Append an entry when a requirement or acceptance criterion changes materially, or the solution
 departs from the design. Record the previous understanding, the new direction, source and reason,
-what is affected, and blocked work. Append only. A Feature correction follows
-[feature-context](feature-context.md). An entry does not trigger discovery, review, or QA reruns.
+what is affected, and blocked work. Append only.

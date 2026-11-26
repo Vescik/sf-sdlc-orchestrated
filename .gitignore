@@ -1,1 +1,19 @@
+# OS
 .DS_Store
+
+# Salesforce local tooling state
+/.sfdx/
+/.sf/
+/.localdevserver/
+deploy-options.json
+coverage/
+.pmdCache
+.eslintcache
+**/lwc/jsconfig.json
+node_modules/
+logs/
+*.log
+
+# Local config and secrets
+.env
+*.local.code-workspace
