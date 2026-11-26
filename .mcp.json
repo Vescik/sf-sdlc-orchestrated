@@ -1,16 +1,18 @@
 {
   "mcpServers": {
     "ado": {
-      "type": "local",
-      "command": "npx",
-      "args": ["-y", "@azure-devops/mcp", "${ADO_ORG}", "-d", "core", "work", "work-items"],
+      "type": "http",
+      "url": "https://mcp.dev.azure.com/${ADO_ORG}",
+      "headers": {
+        "X-MCP-Toolsets": "wit",
+        "X-MCP-Readonly": "true"
+      },
       "tools": ["*"]
     },
     "github": {
       "type": "http",
       "url": "https://api.githubcopilot.com/mcp/",
       "headers": {
-        "Authorization": "Bearer ${GITHUB_TOKEN}",
         "X-MCP-Toolsets": "context,repos,pull_requests"
       },
       "tools": ["*"]

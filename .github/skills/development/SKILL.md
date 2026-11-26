@@ -20,12 +20,15 @@ first ([solution-design](../solution-design/SKILL.md)).
 3. **Implement** in `force-app/`. Check off a task in `tasks.md` only after it is verified.
 4. **Record** material changes to requirements, scope, or design in `decisions.md` before dependent
    work continues. Append only: what changed, why, what it affects. Update the affected design rows.
-5. **Deploy** with the [deployment](../deployment/SKILL.md) skill when `force-app/` or `manifest/`
+5. **Trace** each acceptance criterion to its proof in `acceptance-trace.md` (see below).
+6. **Deploy** with the [deployment](../deployment/SKILL.md) skill when `force-app/` or `manifest/`
    changed.
-6. **Commit** with [git-workflow](../git-workflow/SKILL.md).
+7. **Commit** with [git-workflow](../git-workflow/SKILL.md), with `acceptance-trace.md`.
 
 ## Salesforce and package rules
 
+- Apply the Implementation section of each matching domain skill (table in the workspace
+  instructions). Data steps they name become `manual:` entries in `acceptance-trace.md`.
 - Apex follows `apex.instructions.md`; Flows follow `flows.instructions.md`. Tie tests to the
   acceptance criteria: outcome assertions for Apex; a scenario, bulk, and fault test plan for Flows.
 - When you create or change a component with a top-level `description` for a User Story or Bug, add
@@ -35,6 +38,29 @@ first ([solution-design](../solution-design/SKILL.md)).
   differently from the design, record it in `decisions.md` before changing code, and propose a
   `docs/package-constraints.md` entry.
 - Remove any trace flags and debug levels you create for log analysis.
+
+## Acceptance trace
+
+`acceptance-trace.md` in the work item links every AC in `ac-coverage.md` to the test that proves
+it. `ac-coverage.md` is the plan; the trace names the tests that exist.
+
+```markdown
+| AC | Covered by | Note |
+|---|---|---|
+| AC-1 | CaseRouterTest.routesHighToTier2 | |
+| AC-2 | CaseRouterTest.routesOtherToTier1, CaseRouterTriggerTest.bulk200 | bulk case |
+| AC-3 | manual: open a Case and check the Routing field | UI only |
+```
+
+- One row per AC, with the IDs from `ac-coverage.md`. An `Explicit no-change` AC gets
+  `none: <reason>`.
+- `Covered by` holds only `Class.method` entries, `manual: <step>`, or `none: <reason>`,
+  separated by commas. Explanations go in `Note`.
+- Each `Class.method` exists in `force-app/` and asserts the outcome the AC describes.
+- Use `manual:` only when an Apex test cannot observe the behavior, such as page layout or UI-only
+  behavior. A Flow AC needs an Apex test that runs the Flow through DML and asserts its effect,
+  or a `manual:` step.
+- Update the trace whenever a test or an AC changes.
 
 ## Org change log
 

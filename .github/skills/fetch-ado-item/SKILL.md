@@ -8,8 +8,8 @@ argument-hint: "itemId=<ID>"
 
 Input: `itemId=<ID>`, a positive number. Output: `work-items/<id>-<slug>/ado-context.md`.
 
-1. **Fetch** with the ADO MCP tool `wit_get_work_item` (id `<ID>`, expand `relations`). ADO MCP
-   not available or the call fails: report it and stop. Never write a snapshot from memory.
+1. **Fetch** with the ADO MCP tool `wit_work_item`, action `get`, id `<ID>`, with relations. ADO
+   MCP not available or the call fails: report it and stop. Never write a snapshot from memory.
 2. **Folder.** Find `work-items/<ID>-*/`. One match: use it. None: create
    `work-items/<ID>-<slug>/`, slug from the title: lowercase, hyphens, at most five words. More
    than one: ask. Never rename a folder because the title changed.

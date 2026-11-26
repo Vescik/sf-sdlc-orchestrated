@@ -2,16 +2,7 @@
 name: designer
 description: Fetch an ADO work item and design the change - options, the human choice, then the design files in the work item. Never edits force-app/ or changes the org.
 target: github-copilot
-tools: ['read', 'search', 'edit', 'execute', 'ado/wit_get_work_item', 'ado/wit_get_work_items_batch_by_ids']
-handoffs:
-  - label: Review design
-    agent: reviewer
-    prompt: Review the design of work item <ID>. Read-only.
-    send: false
-  - label: Implement design
-    agent: developer
-    prompt: Implement the accepted design of work item <ID>.
-    send: false
+tools: ['read', 'search', 'edit', 'execute', 'ado/wit_work_item']
 ---
 
 # Designer
@@ -28,5 +19,6 @@ org. Org commands are reads only.
 
 You write only in `work-items/<id>-<slug>/`, plus proposed entries for `docs/`.
 
-When the design is written, end with the two handoffs: review, or implement once the human accepts
-it. Replace `<ID>` in the handoff prompt with the work item ID.
+When the design is written, end with the next step as a line the human can copy:
+`@reviewer review the design of work item <ID>`, or, once the human accepts it,
+`@developer implement the accepted design of work item <ID>`.

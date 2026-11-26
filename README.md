@@ -4,7 +4,7 @@ A thin GitHub Copilot workspace for Salesforce work on top of the Kantata SX (`K
 managed package. It takes an ADO work item to a design, an implementation, a deploy to `intDev`,
 and a draft PR.
 
-It has six skills, four agents, two MCP servers, and no scripts or hooks. The guardrails are the instructions
+It has a handful of skills and agents, two MCP servers, and no scripts or hooks. The guardrails are the instructions
 plus the VS Code, MCP, and GitHub configuration below.
 
 ## Contents
@@ -12,11 +12,11 @@ plus the VS Code, MCP, and GitHub configuration below.
 | Path | Purpose |
 |---|---|
 | `.github/copilot-instructions.md` | Routing, tools, org access, confirmations |
-| `.github/skills/` | `fetch-ado-item`, `solution-design`, `development`, `continue-development`, `deployment`, `git-workflow` |
-| `.github/agents/` | `designer`, `developer`, `reviewer`, `git-agent`, each with only its tools |
+| `.github/skills/` | `fetch-ado-item`, `solution-design`, `development`, `continue-development`, `deployment`, `git-workflow`, `development-loop` (run only by `dev-loop`) |
+| `.github/agents/` | `designer`, `developer`, `reviewer`, `git-agent`, `dev-loop`, each with only its tools |
+| `.github/skills/user-access/` | Domain skill: permission sets and Permission records. Domain skills are listed in `copilot-instructions.md` |
 | `.github/instructions/` | Package boundaries, Apex rules, Flow rules |
-| `.vscode/mcp.json` | `ado` (Azure DevOps) and `github` MCP servers for VS Code |
-| `.mcp.json` | The same two servers for the Copilot CLI. Reads `ADO_ORG` and `GITHUB_TOKEN` from the environment |
+| `.mcp.json` | `ado` (Azure DevOps) and `github` MCP servers, read by the Copilot harness |
 | `.vscode/settings.json` | Skills on, read-only commands auto-approved, everything else asks |
 | `work-items/` | One folder per work item. See its README |
 | `docs/` | Package concept and constraints, filled by the team |
@@ -27,34 +27,55 @@ plus the VS Code, MCP, and GitHub configuration below.
 ```text
 designer   /fetch-ado-item itemId=<ID>    ADO -> work-items/<id>-<slug>/ado-context.md
 designer   /solution-design itemId=<ID>   options -> your choice -> design files
-reviewer   (handoff) review design        findings, no edits
-developer  (handoff) implement            tasks.md -> force-app/ -> dry run -> your yes -> deploy
-reviewer   (handoff) review code          findings, no edits
-git-agent  (handoff) push and draft PR    draft PR through GitHub MCP
+reviewer   review the design of <ID>      findings, no edits
+developer  implement <ID>                 tasks.md -> force-app/ -> dry run -> your yes -> deploy
+reviewer   review the implementation      findings, no edits
+git-agent  push and open a draft PR       draft PR through GitHub MCP
 ```
 
-Agents pass work with handoff buttons. Each button prefills a prompt; you check it and send it.
+Or, after design acceptance, let `dev-loop` run development in a loop:
+
+```text
+dev-loop   @dev-loop implement work item <ID>
+           developer builds -> dry run with RunSpecifiedTests -> fix (max 5 attempts)
+           -> reviewer -> dry run with RunLocalTests -> report with the validation job ID
+developer  quick deploy of that job ID   your yes -> deploy without rerunning tests
+git-agent  push and open a draft PR
+```
+
+`dev-loop` never deploys for real. It runs only dry runs, which change nothing in the org, and
+records each step in `work-items/<id>-<slug>/loop.md`. Failing tests outside the work item are
+reported as blocked, not fixed.
+
+The Copilot harness has no handoff buttons. Each agent ends with the next line to send, such as
+`@developer implement the accepted design of work item <ID>`. You check it and send it.
 
 ## Setup
 
-1. Install VS Code, the GitHub Copilot extension, the Salesforce CLI (`sf`), and Node.js (for the
-   ADO MCP server through `npx`).
+1. Install VS Code, the GitHub Copilot extension, and the Salesforce CLI (`sf`). Your Azure DevOps
+   organization must sign in with Microsoft Entra ID: the remote ADO MCP server needs it.
 2. Log in to the dev org with the alias `intDev`:
 
    ```bash
    sf org login web --alias intDev --instance-url https://test.salesforce.com
    ```
 
-3. Open the folder in VS Code. Start both servers from `.vscode/mcp.json`: enter the ADO
-   organization name when asked, then sign in to Azure DevOps and GitHub in the browser.
-4. In Copilot Chat, pick the `designer` agent and run `/fetch-ado-item itemId=<ID>`.
+3. Set the ADO organization name in your shell profile, not in a file in this repo, and restart
+   VS Code so it sees the variable:
 
-For the Copilot CLI, set the two variables in your shell profile, never in a file in this repo,
-then start `copilot` in the repository root. It reads `.mcp.json` and `.github/agents/`.
+   ```bash
+   export ADO_ORG=<organization>
+   ```
 
-```bash
-export ADO_ORG=<organization> GITHUB_TOKEN=$(gh auth token)
-```
+4. Open the folder in VS Code. In Copilot Chat, start a new chat, pick **Copilot** in the Session
+   Target control before the first prompt, and trust the folder when asked.
+5. Run **Chat: Open Customizations**, select **MCP Servers**, and start `ado` and `github`. Sign in
+   when asked (**Authenticate**): Microsoft Entra ID for `ado`, GitHub for `github`.
+6. Pick the `designer` agent and run `/fetch-ado-item itemId=<ID>`.
+
+The agents use the Copilot schema (`target: github-copilot`). It does not support `handoffs` or
+`argument-hint`, so the agents have neither. The Local harness and `.vscode/mcp.json` are not
+used.
 
 ## Guardrails
 
@@ -70,17 +91,17 @@ These hold without any script. Keep them in place.
 4. **Branch protection on `main`.** In GitHub, add a ruleset for `main`: require a pull request with
    one approval, and block force pushes. Then a PR cannot be merged without a second person, even
    through the MCP server.
-5. **Tools per agent.** Only `designer` has ADO tools, and only the two read tools. Only
-   `git-agent` has GitHub tools. `reviewer` has no editor. The default Copilot agent still has all
+5. **Tools per agent.** Only `designer` has ADO tools, and only `wit_work_item`. Only
+   `git-agent` has GitHub tools. `reviewer` and `dev-loop` have no editor. The default Copilot agent still has all
    tools, so prefer the named agents.
-6. **Narrow MCP scope.** ADO loads only the `core`, `work`, and `work-items` domains. GitHub loads
-   only the `context`, `repos`, and `pull_requests` toolsets.
-7. **Pin the ADO MCP version** after the first successful run: replace `@azure-devops/mcp` with
-   `@azure-devops/mcp@<version>` in `.vscode/mcp.json`.
+6. **Narrow MCP scope.** Both servers are remote (HTTP), so there is nothing to install or pin.
+   ADO loads only the work item tools (`X-MCP-Toolsets: wit`) in read-only mode
+   (`X-MCP-Readonly: true`), so no agent can change ADO. GitHub loads only the `context`, `repos`,
+   and `pull_requests` toolsets.
 
 ## Not in v1
 
-- Autonomous delivery loop (conductor agent, delivery check script). Add it when the six skills
-  work well.
+- A loop over the whole delivery (deploy, push, PR without a human). `dev-loop` covers development
+  only.
 - Test Strategist agent, hooks.
 - QA test plans, Feature-level delivery, wiki publication.
