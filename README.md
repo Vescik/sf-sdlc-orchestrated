@@ -44,8 +44,8 @@ you          read the design, set Status: accepted
 ```
 
 `design-loop` never chooses an option, answers a business question, or accepts the design.
-Questions only a human can answer end the loop as `OPEN QUESTIONS`. It records each step in
-`work-items/<id>-<slug>/design-loop.md`.
+Questions only a human can answer end the loop as `OPEN QUESTIONS`. It logs each step in the chat
+and in its report, not in a file.
 
 After design acceptance, let `dev-loop` run development in a loop:
 
@@ -58,7 +58,7 @@ git-agent  push and open a draft PR
 ```
 
 `dev-loop` never deploys for real. It runs only dry runs, which change nothing in the org, and
-records each step in `work-items/<id>-<slug>/loop.md`. Failing tests outside the work item are
+logs each step in the chat and in its report, not in a file. Failing tests outside the work item are
 reported as blocked, not fixed.
 
 The Copilot harness has no handoff buttons. Each agent ends with the next line to send, such as

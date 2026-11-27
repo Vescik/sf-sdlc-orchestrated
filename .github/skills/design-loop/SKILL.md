@@ -14,7 +14,13 @@ Input: a work item ID and the option the human chose. Output: design files that 
 and a report. The loop never accepts the design: only a human sets `Status: accepted`. Budget: 3
 write attempts per run.
 
-Write each step to `design-loop.md` when it ends: attempt number, step, commit, result, details.
+Keep the log in chat, not in a file: you have no editor, and a log file would leave the tree
+dirty. When a step ends, print one row of this table, and repeat the whole table in the report:
+
+```markdown
+| # | Step | Commit | Result | Details |
+|---|---|---|---|---|
+```
 
 ## Start
 
@@ -22,12 +28,6 @@ Write each step to `design-loop.md` when it ends: attempt number, step, commit, 
    (or `overview.md` records it), the branch `work-item/<ID>-<slug>`, and an empty
    `git status --porcelain`. Any check fails: report it and stop. No option chosen: tell the human
    to get the options from `@designer design work item <ID>` first.
-2. Create or append to `design-loop.md` in the work item folder:
-
-   ```markdown
-   | # | Step | Commit | Result | Details |
-   |---|---|---|---|---|
-   ```
 
 ## Loop
 
@@ -71,7 +71,7 @@ Domain skills applied: <names, or none matched>
 Open questions: <question, owner>
 Review: <blocking fixed: n>, open findings: <list>
 Not verified: <for example: org facts marked [UNVERIFIED]>
-Log: work-items/<id>-<slug>/design-loop.md
+Log: <the table of every step>
 ```
 
 On `READY FOR ACCEPTANCE`, end with the next step for the human: read the design, set

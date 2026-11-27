@@ -12,19 +12,19 @@ Run this only as the `dev-loop` agent. Any other agent: stop and tell the human 
 Input: a work item ID with an accepted design. Output: a validated build on the work item branch,
 a validation job ID for quick deploy, and a report. Budget: 5 build attempts per run.
 
-Write each step to `loop.md` when it ends: attempt number, step, job ID, result, details.
+Keep the log in chat, not in a file: you have no editor, and a log file would leave the tree
+dirty. When a step ends, print one row of this table, and repeat the whole table in the report:
+
+```markdown
+| # | Step | Job ID | Result | Details |
+|---|---|---|---|---|
+```
 
 ## Start
 
 1. Find `work-items/<ID>-*/`. Check: a design with `Status: accepted` (or the human asked to
    implement it), the branch `work-item/<ID>-<slug>`, and an empty `git status --porcelain`. Any
    check fails: report it and stop.
-2. Create or append to `loop.md` in the work item folder:
-
-   ```markdown
-   | # | Step | Job ID | Result | Details |
-   |---|---|---|---|---|
-   ```
 
 ## Loop
 
@@ -80,7 +80,7 @@ Trace: <n> ACs, <n> by Apex tests, <n> manual, <n> none
 Manual steps: <the manual: steps, for the human after deploy>
 Review: <blocking fixed: n>, open findings: <list>
 Not verified: <for example: Flow changes have no Apex tests>
-Log: work-items/<id>-<slug>/loop.md
+Log: <the table of every step>
 ```
 
 On `PASS` or `PASS WITH BLOCKED TESTS`, end with the next step for the human:

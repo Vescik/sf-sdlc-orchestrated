@@ -26,8 +26,8 @@ need a deployment.
 
 ## Quick deploy of a validation
 
-For a validation job ID from dev-loop (`loop.md`): check that HEAD is the commit the loop
-validated, then confirm as in step 4 (scope: the validated job) and run
+For a validation job ID from a dev-loop report: check that HEAD is the commit the report names
+(`HEAD <short SHA>`), then confirm as in step 4 (scope: the validated job) and run
 `sf project deploy quick --job-id <ID> --target-org intDev --json`. Salesforce rejects it if the
 validation is older than 10 days or the org changed the same components since. Then run a normal
 deploy from step 3. Log it as in step 7.
