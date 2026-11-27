@@ -20,6 +20,7 @@ organized by work item and goes from an ADO requirement to a reviewed PR.
 | Design and `tasks.md`: continue, change, fix, remove | `developer` | [continue-development](skills/continue-development/SKILL.md) |
 | No design, small change | `developer` | [development](skills/development/SKILL.md), small change |
 | Metadata must reach the org | `developer` | [deployment](skills/deployment/SKILL.md) |
+| Option chosen: write the design in a loop until it passes the checks | `design-loop` | [design-loop](skills/design-loop/SKILL.md) |
 | Design accepted: implement in a loop until validated and reviewed | `dev-loop` | [development-loop](skills/development-loop/SKILL.md) |
 | Independent review of a design or implementation | `reviewer` | None. The agent holds the procedure |
 | Sync, conflicts, push, PR | `git-agent` | [git-workflow](skills/git-workflow/SKILL.md) |
@@ -30,15 +31,17 @@ the line to send it, such as `@developer implement work item <ID>`. The default 
 
 ## Domain skills
 
-Domain skills hold the rules of one area. Apply each skill whose trigger matches the change: in
-design, in implementation, and in review.
+Domain skills hold the rules of one area. Apply each skill whose trigger matches the change: its
+Design section in design, its Design check in the design check, its Implementation section in
+implementation, and its Review section in review.
 
 | Skill | Trigger |
 |---|---|
 | [user-access](skills/user-access/SKILL.md) | New or changed object, field, Apex entry point, LWC, tab, record type, or custom permission |
 
-To add a domain skill: write its `SKILL.md` with Design, Implementation, and Review sections, and
-add one row here.
+To add a domain skill: copy [the template](../docs/domain-skill-template.md) to
+`skills/<name>/SKILL.md`, fill it in, and add one row here. `design-loop`, `dev-loop`, and the
+Reviewer pick it up from this table.
 
 ## Work item files
 
@@ -103,7 +106,8 @@ confirmation.
 - `force-app/`: Salesforce DX source. `manifest/`: manifests for removals.
 - `docs/package-concept.md`: the package domain map. `docs/package-constraints.md`: known package
   behavior. Read both when designing or when package behavior matters.
-- `.github/agents/`: `designer`, `developer`, `reviewer`, `git-agent`, `dev-loop`.
+- `.github/agents/`: `designer`, `developer`, `reviewer`, `git-agent`, `design-loop`,
+  `dev-loop`.
 - `.github/instructions/`: [package boundaries](instructions/managed-package.instructions.md),
   [Apex](instructions/apex.instructions.md), [Flows](instructions/flows.instructions.md).
 

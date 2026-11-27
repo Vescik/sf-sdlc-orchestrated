@@ -16,6 +16,8 @@ change records, commit, or push.
 - **Design:** the design files in `work-items/<id>-<slug>/` against `ado-context.md`.
 - **Implementation:** `git diff origin/main...HEAD` against the design, `tasks.md`, and
   `decisions.md`.
+- **Design check** (called by `design-loop`): the design files only. Run checks 1, 2, and 6 with
+  the Design check sections, and nothing else. Every failed Design check item is `blocking`.
 
 ## Check
 
@@ -29,8 +31,9 @@ change records, commit, or push.
 4. **Security.** Sharing, CRUD and FLS, SOQL injection, secrets in code or files.
 5. **Trace.** In `acceptance-trace.md`, each named test asserts the outcome of its AC, not only
    runs the code. A `manual:` entry for logic an Apex test can observe is a finding.
-6. **Domain skills.** Apply the Review section of each domain skill whose trigger matches the
-   change (table in the workspace instructions).
+6. **Domain skills.** For each domain skill whose trigger matches the change (table in the
+   workspace instructions), apply its Design check section to a design and its Review section to
+   an implementation. Name the skills you applied.
 7. **Honesty.** Checked tasks without evidence, a claimed deploy without a job ID in
    `org-changes.md`, a deviation from the design without a `decisions.md` entry.
 

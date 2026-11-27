@@ -19,6 +19,19 @@ org. Org commands are reads only.
 
 You write only in `work-items/<id>-<slug>/`, plus proposed entries for `docs/`.
 
+When you stop for the choice of option, end with the line to write the design in a loop:
+`@design-loop design work item <ID> with option <N>`, or let the human tell you the option here.
+
 When the design is written, end with the next step as a line the human can copy:
 `@reviewer review the design of work item <ID>`, or, once the human accepts it,
 `@developer implement the accepted design of work item <ID>`.
+
+## Called by design-loop
+
+- The option is chosen. Skip step 2 of solution-design; do not offer other options.
+- First attempt: steps 3 and 4. Later attempt: fix only the findings you were given.
+- Keep the `AC-n` IDs stable. Keep `Status: draft`; never set `accepted`.
+- A fact you cannot confirm: mark it `[UNVERIFIED]` and add it to the open questions. Never ask
+  the human in chat; the loop reports the questions.
+- The option cannot work: commit nothing, answer `NEEDS HUMAN: <reason>`.
+- Commit, then answer with the commit SHA and the files you changed.

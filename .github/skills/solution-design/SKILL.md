@@ -29,7 +29,8 @@ the recommendation and mark it `[unconfirmed]`.
 
 ## 3. Confirm facts
 
-Apply the Design section of each matching domain skill (table in the workspace instructions).
+Apply the Design section of each matching domain skill (table in the workspace instructions), and
+write the design so that its Design check passes.
 List the questions the chosen option depends on. Read only what answers them: `force-app/` first,
 the org only for what it does not show. Mark an open one `[UNVERIFIED]`. If the option cannot
 work, report why and revise. Never switch silently.

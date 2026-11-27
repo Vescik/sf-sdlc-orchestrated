@@ -12,9 +12,9 @@ plus the VS Code, MCP, and GitHub configuration below.
 | Path | Purpose |
 |---|---|
 | `.github/copilot-instructions.md` | Routing, tools, org access, confirmations |
-| `.github/skills/` | `fetch-ado-item`, `solution-design`, `development`, `continue-development`, `deployment`, `git-workflow`, `development-loop` (run only by `dev-loop`) |
-| `.github/agents/` | `designer`, `developer`, `reviewer`, `git-agent`, `dev-loop`, each with only its tools |
-| `.github/skills/user-access/` | Domain skill: permission sets and Permission records. Domain skills are listed in `copilot-instructions.md` |
+| `.github/skills/` | `fetch-ado-item`, `solution-design`, `development`, `continue-development`, `deployment`, `git-workflow`, `design-loop` (run only by `design-loop`), `development-loop` (run only by `dev-loop`) |
+| `.github/agents/` | `designer`, `developer`, `reviewer`, `git-agent`, `design-loop`, `dev-loop`, each with only its tools |
+| `.github/skills/user-access/` | Domain skill: permission sets and Permission records. Domain skills are listed in `copilot-instructions.md`; new ones start from `docs/domain-skill-template.md` |
 | `.github/instructions/` | Package boundaries, Apex rules, Flow rules |
 | `.mcp.json` | `ado` (Azure DevOps) and `github` MCP servers, read by the Copilot harness |
 | `.vscode/settings.json` | Skills on, read-only commands auto-approved, everything else asks |
@@ -33,7 +33,21 @@ reviewer   review the implementation      findings, no edits
 git-agent  push and open a draft PR       draft PR through GitHub MCP
 ```
 
-Or, after design acceptance, let `dev-loop` run development in a loop:
+Or, after you choose an option, let `design-loop` write the design in a loop:
+
+```text
+designer     @designer design work item <ID>          options -> stop
+design-loop  @design-loop design work item <ID> with option <N>
+             designer writes -> structure check -> reviewer applies each domain skill's
+             Design check -> fix (max 3 attempts) -> report
+you          read the design, set Status: accepted
+```
+
+`design-loop` never chooses an option, answers a business question, or accepts the design.
+Questions only a human can answer end the loop as `OPEN QUESTIONS`. It records each step in
+`work-items/<id>-<slug>/design-loop.md`.
+
+After design acceptance, let `dev-loop` run development in a loop:
 
 ```text
 dev-loop   @dev-loop implement work item <ID>
@@ -92,7 +106,7 @@ These hold without any script. Keep them in place.
    one approval, and block force pushes. Then a PR cannot be merged without a second person, even
    through the MCP server.
 5. **Tools per agent.** Only `designer` has ADO tools, and only `wit_work_item`. Only
-   `git-agent` has GitHub tools. `reviewer` and `dev-loop` have no editor. The default Copilot agent still has all
+   `git-agent` has GitHub tools. `reviewer`, `design-loop`, and `dev-loop` have no editor. The default Copilot agent still has all
    tools, so prefer the named agents.
 6. **Narrow MCP scope.** Both servers are remote (HTTP), so there is nothing to install or pin.
    ADO loads only the work item tools (`X-MCP-Toolsets: wit`) in read-only mode
@@ -101,7 +115,7 @@ These hold without any script. Keep them in place.
 
 ## Not in v1
 
-- A loop over the whole delivery (deploy, push, PR without a human). `dev-loop` covers development
-  only.
+- A loop over the whole delivery (deploy, push, PR without a human). `design-loop` and `dev-loop`
+  cover design and development only.
 - Test Strategist agent, hooks.
 - QA test plans, Feature-level delivery, wiki publication.

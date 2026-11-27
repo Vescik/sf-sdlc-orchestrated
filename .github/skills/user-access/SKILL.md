@@ -49,6 +49,22 @@ For each component above, decide and write down:
    - `ac-coverage.md`: an AC for the access when the requirement names who must or must not have
      it.
 
+## Design check
+
+Checked in the design files. A failed item is `blocking`.
+
+1. Every new or changed component in `components.md` from "When this applies" has a permission
+   set row that lists its access, or a reason in `decisions.md` why it needs none.
+2. Every permission set row names the ApplicationRoles it serves and the access level per
+   component (read, edit, create, delete, run).
+3. No access wider than the requirement: no grant to all users, no `View All` or `Modify All`
+   unless the requirement asks for it.
+4. Every new permission set has a row for its Permission record and the ApplicationRole link,
+   marked as data, owner Subscriber.
+5. When the requirement says who must or must not have access, `ac-coverage.md` has an AC row for
+   it, verified by an Apex `System.runAs` test, and the Permission record as a `manual:` step.
+6. A field set only by the system (formula, Flow, trigger) is planned read-only for users.
+
 ## Implementation
 
 1. Edit the permission set files in `force-app/main/default/permissionsets/`. Grant only the access
