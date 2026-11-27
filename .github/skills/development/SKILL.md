@@ -60,8 +60,8 @@ it. `ac-coverage.md` is the plan; the trace names the tests that exist.
 | AC-3 | manual: open a Case and check the Routing field | UI only |
 ```
 
-- One row per AC, with the IDs from `ac-coverage.md`. An `Explicit no-change` AC gets
-  `none: <reason>`.
+- One row per AC, with the IDs from `ac-coverage.md`. An `Explicit no-change` or
+  `Removed from source` AC gets `none: <reason>`.
 - `Covered by` holds only `Class.method` entries, `manual: <step>`, or `none: <reason>`,
   separated by commas. Explanations go in `Note`.
 - Each `Class.method` exists in `force-app/` and asserts the outcome the AC describes.

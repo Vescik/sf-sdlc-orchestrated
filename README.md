@@ -36,12 +36,17 @@ git-agent  push and open a draft PR       draft PR through GitHub MCP
 Or, after you choose an option, let `design-loop` write the design in a loop:
 
 ```text
-designer     @designer design work item <ID>          options -> stop
-design-loop  @design-loop design work item <ID> with option <N>
+designer     @designer design work item <ID>                      options -> stop
+design-loop  @design-loop design work item <ID> with option <N>      the whole design
+             @design-loop design AC-4 of work item <ID> with option <N>   only the named ACs
              designer writes -> structure check -> reviewer applies each domain skill's
              Design check -> fix (max 3 attempts) -> report
 you          read the design, set Status: accepted
 ```
+
+For part of a design, rows of other ACs must stay as they were. A change to an accepted design
+sets it back to `Status: draft` with a `decisions.md` entry, and you accept it again. AC IDs never
+change: a new AC from ADO takes the next free ID, and a removed one stays as `Removed from source`.
 
 `design-loop` never chooses an option, answers a business question, or accepts the design.
 Questions only a human can answer end the loop as `OPEN QUESTIONS`. It logs each step in the chat

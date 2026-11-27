@@ -19,7 +19,7 @@ organized by work item and goes from an ADO requirement to a reviewed PR.
 | Design: implement, continue, change, fix, remove | `developer` | [development](skills/development/SKILL.md) |
 | No design, small change | `developer` | [development](skills/development/SKILL.md), small change |
 | Metadata must reach the org | `developer` | [deployment](skills/deployment/SKILL.md) |
-| Option chosen: write the design in a loop until it passes the checks | `design-loop` | [design-loop](skills/design-loop/SKILL.md) |
+| Option chosen: write the whole design, or the named ACs of it, in a loop until it passes the checks | `design-loop` | [design-loop](skills/design-loop/SKILL.md) |
 | Build and validate in a loop: the whole accepted design, part of it (ACs or components), or named components and removals | `dev-loop` | [development-loop](skills/development-loop/SKILL.md) |
 | Independent review of a design or implementation | `reviewer` | None. The agent holds the procedure |
 | Sync, conflicts, push, PR | `git-agent` | [git-workflow](skills/git-workflow/SKILL.md) |

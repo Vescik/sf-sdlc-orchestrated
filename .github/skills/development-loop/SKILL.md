@@ -29,7 +29,7 @@ dirty. When a step ends, print one row of this table, and repeat the whole table
 
    | Mode | Request | Scope | ACs |
    |---|---|---|---|
-   | `design` | "implement work item <ID>", "the whole design" | every `components.md` row with `Create`, `Modify`, or `Remove` | all in `ac-coverage.md` |
+   | `design` | "implement work item <ID>", "the whole design" | every `components.md` row with `Create`, `Modify`, or `Remove` | all in `ac-coverage.md`, except `Removed from source` |
    | `part` | names ACs (`AC-2, AC-3`) or components (`ApexClass:Foo`) | the `components.md` rows with those ACs in their `AC` column, or with those names | the ACs the request names, or those in the `AC` column of the chosen rows |
    | `named` | names components to deploy or remove, outside the design or without one | exactly the named components, as `Type:Name` with `Create`, `Modify`, or `Remove` | none |
 

@@ -27,6 +27,9 @@ Ask at most three business questions. Stop for the choice.
 If the request already names the approach, continue. If the human says "whatever you think", take
 the recommendation and mark it `[unconfirmed]`.
 
+A request for part of an existing design names ACs (`AC-4`, or "the new ACs"). Then the options
+cover only those ACs, and the rest of the design stays as it is.
+
 ## 3. Confirm facts
 
 Apply the Design section of each matching domain skill (table in the workspace instructions), and
@@ -56,13 +59,24 @@ Four files in `work-items/<id>-<slug>/`. Each starts with a title and this heade
 |---|---|---|---|---|
 ```
 
-- Every source AC has at least one row, in source order, without rewriting its meaning. Label the
-  rows `AC-1`, `AC-2` and keep the IDs stable. Without formal ACs, call them human-provided.
-- Status: `Covered` (solution and verification named), `Explicit no-change` (with reason), `Open`.
+- Every source AC has at least one row, in source order, without rewriting its meaning. Without
+  formal ACs, call them human-provided.
+- **AC IDs.** A new design labels the rows `AC-1`, `AC-2`, in source order. An ID never changes
+  and is never reused: an AC added to the source later takes the next free ID (`AC-5`) at its
+  place in source order, and an AC removed from the source keeps its row with status
+  `Removed from source`.
+- Status: `Covered` (solution and verification named), `Explicit no-change` (with reason),
+  `Removed from source` (with the date of the `ado-context.md` refresh), `Open`.
 - Package impact names each touched `KimbleOne__` component with its evidence, or says "no package
   impact". No change to a package-owned definition rests on an assumption.
 - Requirement baseline for ADO work: path to `ado-context.md`, source link, retrieval time.
 - State each fact once. Keep it short.
+
+**Changing part of a design.** Change only the rows of the ACs in the request, and the parts of
+`flows.md` and `overview.md` they need. Leave every other row as it is. A component that an AC
+outside the request also uses: ask before you change it. If the design was `accepted`, set
+`Status: draft` and add a `decisions.md` entry: which ACs changed, why, and what it affects. A
+human accepts the design again.
 
 Commit the design with [git-workflow](../git-workflow/SKILL.md).
 

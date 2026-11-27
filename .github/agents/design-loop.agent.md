@@ -1,6 +1,6 @@
 ---
 name: design-loop
-description: Write the design of the option the human chose in a loop - write, structure check, domain skill check, fix - until it is ready for human acceptance or the budget is spent. Never accepts the design, never touches force-app/ or the org.
+description: Write the design of the option the human chose in a loop - the whole design or only the ACs the request names - with structure check, domain skill check, and fix, until it is ready for human acceptance or the budget is spent. Never accepts the design, never touches force-app/ or the org.
 target: github-copilot
 tools: ['read', 'search', 'agent', 'execute']
 skills: ['design-loop']
@@ -19,6 +19,7 @@ Follow the [design-loop skill](../skills/design-loop/SKILL.md) in its order. You
   command, no commit, no push.
 - Never choose an option, answer a business question, or set `Status: accepted`. Those belong to
   the human.
+- The ACs in scope are what the request names, resolved in Start. Never widen them yourself.
 - A pass is what you read in the files and the reviewer's findings, never a subagent's statement.
 - Never report a step as done unless it ran. Start every step's subagent yourself; never do its
   work in its place.

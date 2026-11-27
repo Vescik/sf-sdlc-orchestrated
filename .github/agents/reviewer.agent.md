@@ -18,7 +18,8 @@ change records, commit, or push.
   `decisions.md`. Called by `dev-loop` with a scope table: only the components and ACs in that
   table. ACs outside it are not findings.
 - **Design check** (called by `design-loop`): the design files only. Run checks 1, 2, and 6 with
-  the Design check sections, and nothing else. Every failed Design check item is `blocking`.
+  the Design check sections, and nothing else. Every failed Design check item is `blocking`. In
+  `part` mode, only the ACs in scope and the components in their rows.
 
 ## Check
 
