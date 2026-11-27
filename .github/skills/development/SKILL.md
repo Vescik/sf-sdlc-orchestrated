@@ -1,9 +1,12 @@
 ---
 name: development
-description: First implementation of a work item that has a design but no tasks.md, or a small change without a design. If tasks.md exists, use continue-development.
+description: Implement, continue, change, fix, or remove source in force-app/ for a work item with a design (with or without tasks.md), including in a new session, or a small change without a design. Not for questions only.
 ---
 
 # Development
+
+The work is the human's instruction. Without one, the open tasks in `tasks.md`; without
+`tasks.md`, the whole design. A named removal or deactivation is a decision: offer no options.
 
 ## Small change without a design
 
@@ -14,10 +17,15 @@ first ([solution-design](../solution-design/SKILL.md)).
 
 ## Implement a design
 
-1. **Read** the design, `decisions.md`, and `ado-context.md`.
+1. **Read** the design, `decisions.md`, and `ado-context.md`. If they exist, also `tasks.md` and
+   the latest lines of `org-changes.md`. Open items in the log are history, not tasks.
 2. **Plan** in `tasks.md`: a checklist of tasks you can verify one by one. Each names its outcome
-   and AC, components, and verification.
+   and AC, components, and verification. If `tasks.md` exists, add the new work to it and keep
+   the checked tasks. Ask only if the work is ambiguous.
 3. **Implement** in `force-app/`. Check off a task in `tasks.md` only after it is verified.
+   - **Removal:** remove the references, delete the files, and write
+     `manifest/<ID>/destructiveChangesPost.xml` with an empty `manifest/<ID>/package.xml`. Update
+     the affected `components.md` rows to `Remove`.
 4. **Record** material changes to requirements, scope, or design in `decisions.md` before dependent
    work continues. Append only: what changed, why, what it affects. Update the affected design rows.
 5. **Trace** each acceptance criterion to its proof in `acceptance-trace.md` (see below).
@@ -52,8 +60,8 @@ it. `ac-coverage.md` is the plan; the trace names the tests that exist.
 | AC-3 | manual: open a Case and check the Routing field | UI only |
 ```
 
-- One row per AC, with the IDs from `ac-coverage.md`. An `Explicit no-change` AC gets
-  `none: <reason>`.
+- One row per AC, with the IDs from `ac-coverage.md`. An `Explicit no-change` or
+  `Removed from source` AC gets `none: <reason>`.
 - `Covered by` holds only `Class.method` entries, `manual: <step>`, or `none: <reason>`,
   separated by commas. Explanations go in `Note`.
 - Each `Class.method` exists in `force-app/` and asserts the outcome the AC describes.

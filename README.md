@@ -12,7 +12,7 @@ plus the VS Code, MCP, and GitHub configuration below.
 | Path | Purpose |
 |---|---|
 | `.github/copilot-instructions.md` | Routing, tools, org access, confirmations |
-| `.github/skills/` | `fetch-ado-item`, `solution-design`, `development`, `continue-development`, `deployment`, `git-workflow`, `design-loop` (run only by `design-loop`), `development-loop` (run only by `dev-loop`) |
+| `.github/skills/` | `fetch-ado-item`, `solution-design`, `development`, `deployment`, `git-workflow`, `design-loop` (run only by `design-loop`), `development-loop` (run only by `dev-loop`) |
 | `.github/agents/` | `designer`, `developer`, `reviewer`, `git-agent`, `design-loop`, `dev-loop`, each with only its tools |
 | `.github/skills/user-access/` | Domain skill: permission sets and Permission records. Domain skills are listed in `copilot-instructions.md`; new ones start from `docs/domain-skill-template.md` |
 | `.github/instructions/` | Package boundaries, Apex rules, Flow rules |
@@ -36,29 +36,42 @@ git-agent  push and open a draft PR       draft PR through GitHub MCP
 Or, after you choose an option, let `design-loop` write the design in a loop:
 
 ```text
-designer     @designer design work item <ID>          options -> stop
-design-loop  @design-loop design work item <ID> with option <N>
+designer     @designer design work item <ID>                      options -> stop
+design-loop  @design-loop design work item <ID> with option <N>      the whole design
+             @design-loop design AC-4 of work item <ID> with option <N>   only the named ACs
              designer writes -> structure check -> reviewer applies each domain skill's
              Design check -> fix (max 3 attempts) -> report
 you          read the design, set Status: accepted
 ```
 
+For part of a design, rows of other ACs must stay as they were. A change to an accepted design
+sets it back to `Status: draft` with a `decisions.md` entry, and you accept it again. AC IDs never
+change: a new AC from ADO takes the next free ID, and a removed one stays as `Removed from source`.
+
 `design-loop` never chooses an option, answers a business question, or accepts the design.
 Questions only a human can answer end the loop as `OPEN QUESTIONS`. It logs each step in the chat
 and in its report, not in a file.
 
-After design acceptance, let `dev-loop` run development in a loop:
+Let `dev-loop` build and validate what you name in a loop:
 
 ```text
-dev-loop   @dev-loop implement work item <ID>
-           developer builds -> dry run with RunSpecifiedTests -> fix (max 5 attempts)
-           -> reviewer -> dry run with RunLocalTests -> report with the validation job ID
+dev-loop   @dev-loop implement work item <ID>                       the whole accepted design
+           @dev-loop implement AC-2 and AC-3 of work item <ID>      part of it, by AC
+           @dev-loop deploy ApexClass:Foo, remove Flow:Bar for <ID> named components and removals
+           scope table -> developer builds -> diff check -> dry run with RunSpecifiedTests
+           -> fix (max 5 attempts) -> reviewer -> dry run with RunLocalTests
+           -> report with the validation job ID
 developer  quick deploy of that job ID   your yes -> deploy without rerunning tests
 git-agent  push and open a draft PR
 ```
 
+The loop prints the scope it resolved from your request before it builds, and never widens it. A
+part of the design that needs a component outside the scope, or an active Flow to remove, ends as
+`NEEDS HUMAN`. Removals are validated in the same dry run through
+`manifest/<ID>/destructiveChangesPost.xml`.
+
 `dev-loop` never deploys for real. It runs only dry runs, which change nothing in the org, and
-logs each step in the chat and in its report, not in a file. Failing tests outside the work item are
+logs each step in the chat and in its report, not in a file. Failing tests outside the scope are
 reported as blocked, not fixed.
 
 The Copilot harness has no handoff buttons. Each agent ends with the next line to send, such as
