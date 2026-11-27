@@ -33,9 +33,16 @@ dirty. When a step ends, print one row of this table, and repeat the whole table
    `tasks.md` and `acceptance-trace.md`, and commits. Check with `git log -1` that a new commit
    exists. No commit: count the attempt, record it, and repeat only with a reason the developer
    named.
-2. **Validate.** Test classes: every class named in `acceptance-trace.md`, plus the test classes
-   in `git diff --name-only origin/main...HEAD`. Run:
-   `sf project deploy start --dry-run --source-dir force-app --test-level RunSpecifiedTests --tests <classes> --wait 30 --target-org intDev --json`.
+2. **Validate.** Scope: only this work item's changes, never all of `force-app`. Take the files
+   from `git diff --name-only --diff-filter=d origin/main...HEAD -- force-app` and pass each
+   one as its own `--source-dir <path>`. Deleted files (`--diff-filter=D`) cannot be in a dry run:
+   list them in the report as removals for the human, through
+   [deployment](../deployment/SKILL.md). No file in scope: stop with `NEEDS HUMAN`.
+   Test classes: every class named in `acceptance-trace.md`, plus the test classes in that diff.
+   Run:
+   `sf project deploy start --dry-run --source-dir <path> [--source-dir <path> ...] --test-level RunSpecifiedTests --tests <classes> --wait 30 --target-org intDev --json`.
+   Check that the components in the result are the ones in the diff. Any other component: stop
+   with `NEEDS HUMAN`.
    No test class in the trace or the diff: use `--test-level NoTestRun` (compile only) and say so
    in the report.
    Timeout: follow with `sf project deploy report --job-id <ID> --wait 30 --target-org intDev --json`.
@@ -51,7 +58,9 @@ dirty. When a step ends, print one row of this table, and repeat the whole table
    `manual:` entry never fails this check and never stops the loop: collect it for the report.
 4. **Review.** Start the `reviewer` subagent for the implementation of the work item. Findings
    marked `blocking`: go to Build with them. Other findings go to the report.
-5. **Regression.** Run the same dry run with `--test-level RunLocalTests --wait 60`. Sort each
+5. **Regression.** Run the same dry run, with the same `--source-dir` scope, with
+   `--test-level RunLocalTests --wait 60`. On `PASS`, its job ID is the one for quick deploy; with
+   failures, use the last Validate job ID, which passed at the same HEAD. Sort each
    failed test:
    - **Ours:** the test class is in the diff, or it references a component in the diff
      (`grep` the class for the component names). Go to Build with it.
@@ -74,6 +83,7 @@ dirty. When a step ends, print one row of this table, and repeat the whole table
 Result: PASS | PASS WITH BLOCKED TESTS | FAILED | STUCK | NEEDS HUMAN
 Work item: <ID>, branch <branch>, HEAD <short SHA>
 Build attempts: <n> of 5
+Scope: <n> files from the diff; removals for the human: <paths, or none>
 Validation: <test level>, job ID <ID>, <passed or failures>
 Regression: RunLocalTests, job ID <ID>, <passed / failures ours / failures not ours>
 Trace: <n> ACs, <n> by Apex tests, <n> manual, <n> none
