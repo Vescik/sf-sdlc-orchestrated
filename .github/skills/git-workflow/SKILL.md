@@ -26,18 +26,20 @@ changes to `main`.
   on a shared one.
 - Resolve conflicts in files of this work item yourself. A conflict in someone else's change, or
   in a meaning you cannot decide: show it and ask.
-- Never force push a shared branch. Force push on your own branch needs an explicit instruction.
+- Never force push a shared branch, rewrite `main`, or delete remote branches. Force push on your
+  own branch needs an explicit instruction.
 
 ## Push and pull request
 
 These need an explicit instruction for each: push, PR creation or update, merge. A finished task
-or a passing check is not an instruction. A push instruction does not create a PR.
+or a passing check is not an instruction. A next-step line the human sent counts as the
+instruction for what it names, nothing more. A push instruction does not create a PR.
 
 - **Push:** `git push -u origin <branch>`.
 - **PR:** with the GitHub MCP tools, which only the Git Agent has. First search for an open PR from the same branch and update it
   instead of creating a second one. Create it as a draft unless the human asks for ready. Base
   `main`. Fill `.github/pull_request_template.md` with facts only: what ran, what did not.
-- **Merge:** only on an explicit instruction naming the PR. Never approve your own PR.
+- **Merge:** only on an explicit instruction naming the PR. Never approve a PR.
 - Report the PR URL, its state, and its checks.
 
 No `gh` CLI, raw API calls, or tokens for GitHub writes. If the GitHub MCP server is not

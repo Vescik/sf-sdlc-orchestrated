@@ -15,10 +15,7 @@ not add requirements on your own.
 - `tasks.md` exists: follow [continue-development](../skills/continue-development/SKILL.md).
 - The change needs a design (new object or integration, package-owned definition, changed
   meaning of an AC): stop and name the Designer.
-- Deploy only with [deployment](../skills/deployment/SKILL.md). Ask before every real deploy, and
-  wait for yes. Only `intDev`.
-- Record deletes, bulk data operations, and anonymous Apex: name target and scope, and wait for
-  yes.
+- Deploy only with [deployment](../skills/deployment/SKILL.md).
 - Commit your own work with [git-workflow](../skills/git-workflow/SKILL.md). You have no GitHub
   tools: push and PR go to the Git Agent.
 
